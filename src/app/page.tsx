@@ -1,65 +1,184 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import SocialIcons from "@/components/SocialIcons";
+import MusicPlayer from "@/components/MusicPlayer";
+import { Sparkles, Image as ImageIcon } from "lucide-react";
+
+// Dynamic import to prevent SSR issues with Three.js
+const GaussianViewer = dynamic(
+    () => import("@/components/GaussianViewer"),
+    {
+        ssr: false,
+        loading: () => <LoadingScreen />
+    }
+);
+
+function LoadingScreen() {
+    return (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-50">
+            <div className="w-12 h-12 border-2 border-transparent border-t-orange-500 rounded-full animate-spin" />
+            <p className="mt-4 text-white text-sm uppercase tracking-widest opacity-70">
+                Loading 3D Scene...
+            </p>
+        </div>
+    );
+}
+
+// Detect if device is low-end or mobile
+function detectBasicMode(): boolean {
+    if (typeof window === 'undefined') return false;
+
+    // Check for mobile devices
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    // Check for low memory (if available)
+    const lowMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory !== undefined
+        && (navigator as Navigator & { deviceMemory?: number }).deviceMemory! < 4;
+
+    // Check for low core count
+    const lowCores = navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency < 4;
+
+    // Check screen size
+    const smallScreen = window.innerWidth < 768;
+
+    // Check for WebGL2 support
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl2');
+    const noWebGL2 = !gl;
+
+    return isMobile || lowMemory || lowCores || smallScreen || noWebGL2;
+}
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    const [mode, setMode] = useState<'auto' | '3d' | 'basic'>('auto');
+    const [isBasicMode, setIsBasicMode] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    const [showModeToggle, setShowModeToggle] = useState(false);
+
+    useEffect(() => {
+        // Auto-detect on mount
+        const shouldUseBasic = detectBasicMode();
+        setIsBasicMode(mode === 'auto' ? shouldUseBasic : mode === 'basic');
+        setShowModeToggle(true);
+    }, [mode]);
+
+    // Handle 3D load error - fallback to basic
+    const handleError = () => {
+        setHasError(true);
+        setIsBasicMode(true);
+    };
+
+    const actualMode = hasError ? true : isBasicMode;
+
+    return (
+        <main className="w-screen h-screen bg-black overflow-hidden relative">
+            {/* Music Player */}
+            <MusicPlayer src="/music/sps - instrumental.mp3" title="SPS" />
+
+            {/* A-RAM Logo - centered above the figure */}
+            <div className="absolute top-[25%] left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                <img
+                    src="/images/a-ram-web-pic.jpeg"
+                    alt="A-RAM"
+                    className="w-48 h-48 object-contain"
+                    style={{
+                        filter: 'drop-shadow(0 0 40px rgba(255, 107, 53, 0.7)) drop-shadow(0 0 80px rgba(255, 68, 68, 0.5))',
+                    }}
+                />
+            </div>
+
+            {/* Basic mode - Static image background */}
+            {actualMode && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black">
+                    <img
+                        src="/background.png"
+                        alt="A-RAM"
+                        className="min-w-full min-h-full w-auto h-auto object-cover"
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            minWidth: '100%',
+                            minHeight: '100%'
+                        }}
+                    />
+                    {/* Subtle gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
+
+                    {/* Social Icons */}
+                    <SocialIcons />
+                </div>
+            )}
+
+            {/* 3D mode - Gaussian Splat viewer */}
+            {!actualMode && (
+                <GaussianViewer modelUrl="/fire.ply" />
+            )}
+
+            {/* Mode toggle button - glassmorphic */}
+            {showModeToggle && (
+                <button
+                    onClick={() => {
+                        if (hasError) return;
+                        setMode(prev => prev === '3d' ? 'basic' : '3d');
+                        setIsBasicMode(prev => !prev);
+                    }}
+                    className="fixed bottom-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300"
+                    style={{
+                        background: hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(255, 255, 255, 0.05)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                        border: hasError ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+                        color: hasError ? 'rgb(248, 113, 113)' : 'rgba(255, 255, 255, 0.7)',
+                        cursor: hasError ? 'not-allowed' : 'pointer'
+                    }}
+                    disabled={hasError}
+                    title={hasError ? '3D mode unavailable' : `Switch to ${actualMode ? '3D' : 'Basic'} mode`}
+                >
+                    {actualMode ? (
+                        <>
+                            <Sparkles className="w-3 h-3" />
+                            <span className="text-[10px] uppercase tracking-wider">
+                                {hasError ? '3D N/A' : 'Try 3D'}
+                            </span>
+                        </>
+                    ) : (
+                        <>
+                            <ImageIcon className="w-3 h-3" />
+                            <span className="text-[10px] uppercase tracking-wider">Basic</span>
+                        </>
+                    )}
+                </button>
+            )}
+
+            {/* Performance notice for auto-detected basic mode */}
+            {showModeToggle && actualMode && !hasError && mode === 'auto' && (
+                <div
+                    className="fixed bottom-4 left-4 z-50 px-2.5 py-1.5 rounded-full"
+                    style={{
+                        background: 'rgba(0, 0, 0, 0.3)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.05)'
+                    }}
+                >
+                    <p className="text-white/40 text-[9px]">
+                        Low-power mode •
+                        <button
+                            onClick={() => {
+                                setMode('3d');
+                                setIsBasicMode(false);
+                            }}
+                            className="ml-1 text-orange-400/70 hover:text-orange-400"
+                        >
+                            Try 3D
+                        </button>
+                    </p>
+                </div>
+            )}
+        </main>
+    );
 }

@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Large files - these are handled by Git LFS
+# public/fire.ply is tracked by LFS, see .gitattributes
+fire.ply
+public/fire_optimized.ply
+# Exception - allow public/fire.ply for LFS
+!public/fire.ply
+
+# Temporary dev files
+index.html
+main.js
+styles.css
+server.mjs
+clean_ply.mjs
+downsample.mjs
+convert.mjs
