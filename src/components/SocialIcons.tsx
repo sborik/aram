@@ -103,10 +103,10 @@ const BandcampIcon = () => (
 const LINKS = [
     { id: "spotify", name: "Spotify", url: "https://spotify.com", Icon: SpotifyIcon },
     { id: "bandcamp", name: "Bandcamp", url: "https://bandcamp.com", Icon: BandcampIcon },
-    { id: "instagram", name: "Instagram", url: "https://instagram.com", Icon: () => <Instagram className="w-4 h-4" /> },
+    { id: "instagram", name: "Instagram", url: "https://instagram.com/aramdaband", Icon: () => <Instagram className="w-4 h-4" /> },
     { id: "x", name: "X", url: "https://x.com", Icon: XIcon },
     { id: "soundcloud", name: "SoundCloud", url: "https://soundcloud.com", Icon: SoundCloudIcon },
-    { id: "tiktok", name: "TikTok", url: "https://tiktok.com", Icon: TikTokIcon },
+    { id: "tiktok", name: "TikTok", url: "https://tiktok.com/@arambnd", Icon: TikTokIcon },
     { id: "merch", name: "Merch", url: "https://a-ram.printify.me/", Icon: () => <ShoppingBag className="w-4 h-4" /> },
     { id: "facebook", name: "Facebook", url: "https://www.facebook.com/profile.php?id=61585481533517", Icon: () => <Facebook className="w-4 h-4" /> },
     { id: "music", name: "Apple Music", url: "https://music.apple.com", Icon: () => <Music className="w-4 h-4" /> },
