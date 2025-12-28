@@ -92,9 +92,12 @@ export default function Home() {
             {/* Basic mode - Static image background */}
             {actualMode && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black">
-                    <img
-                        src="/background.png"
-                        alt="A-RAM"
+                    <video
+                        src="/web-loop-2d.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
                         className="min-w-full min-h-full w-auto h-auto object-cover"
                         style={{
                             position: 'absolute',
