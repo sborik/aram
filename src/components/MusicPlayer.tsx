@@ -27,7 +27,6 @@ export default function MusicPlayer({ src, title = "Now Playing" }: MusicPlayerP
 
         const handleCanPlay = () => {
             setIsLoaded(true);
-            setShowPlayer(true);
             setDuration(audio.duration);
         };
 
@@ -51,6 +50,9 @@ export default function MusicPlayer({ src, title = "Now Playing" }: MusicPlayerP
         audio.addEventListener('timeupdate', handleTimeUpdate);
         audio.addEventListener('ended', handleEnded);
         audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+        // Show player immediately on mount (don't wait for canplay which may not fire on mobile)
+        setShowPlayer(true);
 
         return () => {
             audio.removeEventListener('canplay', handleCanPlay);
