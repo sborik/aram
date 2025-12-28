@@ -129,7 +129,7 @@ export default function Home() {
                         setMode(prev => prev === '3d' ? 'basic' : '3d');
                         setIsBasicMode(prev => !prev);
                     }}
-                    className="fixed bottom-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300"
+                    className="fixed bottom-4 right-4 z-50 flex items-center gap-1 px-4 py-2 rounded-full transition-all duration-300"
                     style={{
                         background: hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(255, 255, 255, 0.05)',
                         backdropFilter: 'blur(20px)',
@@ -142,46 +142,13 @@ export default function Home() {
                     disabled={hasError}
                     title={hasError ? '3D mode unavailable' : `Switch to ${actualMode ? '3D' : 'Basic'} mode`}
                 >
-                    {actualMode ? (
-                        <>
-                            <Sparkles className="w-3 h-3" />
-                            <span className="text-[10px] uppercase tracking-wider">
-                                {hasError ? '3D N/A' : 'Try 3D'}
-                            </span>
-                        </>
-                    ) : (
-                        <>
-                            <ImageIcon className="w-3 h-3" />
-                            <span className="text-[10px] uppercase tracking-wider">Basic</span>
-                        </>
-                    )}
+                    <span className="text-[8px] uppercase tracking-widest">
+                        {actualMode ? (hasError ? '3D N/A' : 'Try 3D') : 'Basic'}
+                    </span>
                 </button>
             )}
 
-            {/* Performance notice for auto-detected basic mode */}
-            {showModeToggle && actualMode && !hasError && mode === 'auto' && (
-                <div
-                    className="fixed bottom-4 left-4 z-50 px-2.5 py-1.5 rounded-full"
-                    style={{
-                        background: 'rgba(0, 0, 0, 0.3)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.05)'
-                    }}
-                >
-                    <p className="text-white/40 text-[9px]">
-                        Low-power mode •
-                        <button
-                            onClick={() => {
-                                setMode('3d');
-                                setIsBasicMode(false);
-                            }}
-                            className="ml-1 text-orange-400/70 hover:text-orange-400"
-                        >
-                            Try 3D
-                        </button>
-                    </p>
-                </div>
-            )}
+            {/* Low-power mode notice removed for cleaner mobile experience */}
         </main>
     );
 }
