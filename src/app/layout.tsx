@@ -27,8 +27,8 @@ export const metadata: Metadata = {
         images: ["/images/a-ram-web-pic.jpeg"],
     },
     icons: {
-        icon: "/images/a-ram-web-pic.jpeg",
-        apple: "/images/a-ram-web-pic.jpeg",
+        icon: "/icon.png",
+        apple: "/apple-icon.png",
     },
 };
 
