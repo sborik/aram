@@ -55,6 +55,11 @@ const BRAND_COLORS: Record<string, { bg: string; glow: string; icon: string }> =
         glow: 'rgba(24, 119, 242, 0.6)',
         icon: '#1877F2'
     },
+    bandcamp: {
+        bg: 'rgba(99, 154, 169, 0.2)',
+        glow: 'rgba(99, 154, 169, 0.6)',
+        icon: '#639AA9'
+    },
 };
 
 // Custom SVG icons - explicit small size
@@ -88,9 +93,16 @@ const ThreadsIcon = () => (
     </svg>
 );
 
-// Social links - arranged in a circle
+const BandcampIcon = () => (
+    <svg viewBox="0 0 24 24" className="w-4 h-4">
+        <path fill="currentColor" d="M0 18.75l7.437-13.5H24l-7.438 13.5H0z" />
+    </svg>
+);
+
+// Social links - arranged in a circle (9 icons)
 const LINKS = [
     { id: "spotify", name: "Spotify", url: "https://spotify.com", Icon: SpotifyIcon },
+    { id: "bandcamp", name: "Bandcamp", url: "https://bandcamp.com", Icon: BandcampIcon },
     { id: "instagram", name: "Instagram", url: "https://instagram.com", Icon: () => <Instagram className="w-4 h-4" /> },
     { id: "x", name: "X", url: "https://x.com", Icon: XIcon },
     { id: "soundcloud", name: "SoundCloud", url: "https://soundcloud.com", Icon: SoundCloudIcon },
