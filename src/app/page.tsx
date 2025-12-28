@@ -75,7 +75,7 @@ export default function Home() {
     return (
         <main className="w-screen h-screen bg-black overflow-hidden relative">
             {/* Music Player */}
-            <MusicPlayer src="/music/to-the-arena-instrumental.mp3" title="To The Arena" />
+            <MusicPlayer src="/music/to-the-arena-instrumental.mp3" title="To The Arena!" />
 
             {/* A-RAM Logo - centered above the figure */}
             <div className="absolute top-[25%] left-1/2 -translate-x-1/2 z-20 pointer-events-none">
