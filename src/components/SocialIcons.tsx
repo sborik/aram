@@ -166,7 +166,7 @@ export default function SocialIcons() {
 
                         {/* Tooltip - appears above for bottom icons */}
                         <span
-                            className={`absolute left-1/2 -translate-x-1/2 px-3 py-1.5 text-[9px] font-medium uppercase tracking-widest rounded-lg whitespace-nowrap transition-all duration-300 ${isHovered
+                            className={`absolute left-1/2 -translate-x-1/2 px-4 py-2 text-[8px] font-medium uppercase tracking-widest rounded-full whitespace-nowrap transition-all duration-300 ${isHovered
                                 ? "opacity-100"
                                 : "opacity-0"
                                 }`}
