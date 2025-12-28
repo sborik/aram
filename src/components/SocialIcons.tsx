@@ -4,7 +4,8 @@ import { useState } from "react";
 import {
     Music,
     ShoppingBag,
-    Instagram
+    Instagram,
+    Facebook
 } from "lucide-react";
 
 // Brand colors for each platform - reordered to spread white icons apart
@@ -49,6 +50,11 @@ const BRAND_COLORS: Record<string, { bg: string; glow: string; icon: string }> =
         glow: 'rgba(255, 255, 255, 0.4)',
         icon: '#ffffff'
     },
+    facebook: {
+        bg: 'rgba(24, 119, 242, 0.2)',
+        glow: 'rgba(24, 119, 242, 0.6)',
+        icon: '#1877F2'
+    },
 };
 
 // Custom SVG icons - explicit small size
@@ -82,15 +88,15 @@ const ThreadsIcon = () => (
     </svg>
 );
 
-// Social links - REORDERED to spread white icons apart
+// Social links - arranged in a circle
 const LINKS = [
     { id: "spotify", name: "Spotify", url: "https://spotify.com", Icon: SpotifyIcon },
     { id: "instagram", name: "Instagram", url: "https://instagram.com", Icon: () => <Instagram className="w-4 h-4" /> },
     { id: "x", name: "X", url: "https://x.com", Icon: XIcon },
     { id: "soundcloud", name: "SoundCloud", url: "https://soundcloud.com", Icon: SoundCloudIcon },
     { id: "tiktok", name: "TikTok", url: "https://tiktok.com", Icon: TikTokIcon },
-    { id: "merch", name: "Merch", url: "https://example.com/merch", Icon: () => <ShoppingBag className="w-4 h-4" /> },
-    { id: "threads", name: "Threads", url: "https://threads.net", Icon: ThreadsIcon },
+    { id: "merch", name: "Merch", url: "https://a-ram.printify.me/", Icon: () => <ShoppingBag className="w-4 h-4" /> },
+    { id: "facebook", name: "Facebook", url: "https://www.facebook.com/profile.php?id=61585481533517", Icon: () => <Facebook className="w-4 h-4" /> },
     { id: "music", name: "Apple Music", url: "https://music.apple.com", Icon: () => <Music className="w-4 h-4" /> },
 ];
 
