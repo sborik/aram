@@ -116,12 +116,12 @@ export default function SocialIcons() {
     const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
 
     return (
-        <div className="absolute inset-0 pointer-events-none z-10">
+        <div className="absolute inset-0 pointer-events-none z-10 pb-safe">
             {LINKS.map((link, index) => {
                 const angle = (index / LINKS.length) * Math.PI * 2 - Math.PI / 2;
-                const radius = 38;
+                const radius = 32; // Reduced from 38 to fit mobile screens better
                 const x = 50 + Math.cos(angle) * radius;
-                const y = 50 + Math.sin(angle) * radius;
+                const y = 46 + Math.sin(angle) * radius; // Shifted up from 50 to 46
                 const Icon = link.Icon;
                 const colors = BRAND_COLORS[link.id];
                 const isHovered = hoveredIcon === link.id;
