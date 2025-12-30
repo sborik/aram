@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import SocialIcons from "@/components/SocialIcons";
 import MusicPlayer from "@/components/MusicPlayer";
 import { Sparkles, Image as ImageIcon } from "lucide-react";
 
-// Dynamic import to prevent SSR issues with Three.js
+// Dynamic import preserved so 3D viewer code remains available if re-enabled
 const GaussianViewer = dynamic(
     () => import("@/components/GaussianViewer"),
     {
@@ -26,51 +25,9 @@ function LoadingScreen() {
     );
 }
 
-// Detect if device is low-end or mobile
-function detectBasicMode(): boolean {
-    if (typeof window === 'undefined') return false;
-
-    // Check for mobile devices
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    // Check for low memory (if available)
-    const lowMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory !== undefined
-        && (navigator as Navigator & { deviceMemory?: number }).deviceMemory! < 4;
-
-    // Check for low core count
-    const lowCores = navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency < 4;
-
-    // Check screen size
-    const smallScreen = window.innerWidth < 768;
-
-    // Check for WebGL2 support
-    const canvas = document.createElement('canvas');
-    const gl = canvas.getContext('webgl2');
-    const noWebGL2 = !gl;
-
-    return isMobile || lowMemory || lowCores || smallScreen || noWebGL2;
-}
-
 export default function Home() {
-    const [mode, setMode] = useState<'auto' | '3d' | 'basic'>('auto');
-    const [isBasicMode, setIsBasicMode] = useState(false);
-    const [hasError, setHasError] = useState(false);
-    const [showModeToggle, setShowModeToggle] = useState(false);
-
-    useEffect(() => {
-        // Auto-detect on mount
-        const shouldUseBasic = detectBasicMode();
-        setIsBasicMode(mode === 'auto' ? shouldUseBasic : mode === 'basic');
-        setShowModeToggle(true);
-    }, [mode]);
-
-    // Handle 3D load error - fallback to basic
-    const handleError = () => {
-        setHasError(true);
-        setIsBasicMode(true);
-    };
-
-    const actualMode = hasError ? true : isBasicMode;
+    // 3D viewer kept but intentionally disabled to always show the 2D video loop
+    const show3D = false;
 
     return (
         <main className="w-screen h-screen bg-black overflow-hidden relative">
@@ -90,65 +47,34 @@ export default function Home() {
             </div>
 
             {/* Basic mode - Static image background */}
-            {actualMode && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black">
-                    <video
-                        src="/web-loop-2d.mp4"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="min-w-full min-h-full w-auto h-auto object-cover"
-                        style={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            minWidth: '100%',
-                            minHeight: '100%'
-                        }}
-                    />
-                    {/* Subtle gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
+            <div className="absolute inset-0 flex items-center justify-center bg-black">
+                <video
+                    src="/web-loop-2d.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="min-w-full min-h-full w-auto h-auto object-cover"
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        minWidth: '100%',
+                        minHeight: '100%'
+                    }}
+                />
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
 
-                    {/* Social Icons */}
-                    <SocialIcons />
-                </div>
-            )}
+                {/* Social Icons */}
+                <SocialIcons />
+            </div>
 
-            {/* 3D mode - Gaussian Splat viewer */}
-            {!actualMode && (
+            {/* 3D mode - Gaussian Splat viewer (disabled) */}
+            {show3D && (
                 <GaussianViewer modelUrl="/fire.ply" />
             )}
-
-            {/* Mode toggle button - glassmorphic */}
-            {showModeToggle && (
-                <button
-                    onClick={() => {
-                        if (hasError) return;
-                        setMode(prev => prev === '3d' ? 'basic' : '3d');
-                        setIsBasicMode(prev => !prev);
-                    }}
-                    className="fixed bottom-4 right-4 z-50 flex items-center gap-1 px-4 py-2 rounded-full transition-all duration-300"
-                    style={{
-                        background: hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-                        backdropFilter: 'blur(20px)',
-                        WebkitBackdropFilter: 'blur(20px)',
-                        border: hasError ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)',
-                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-                        color: hasError ? 'rgb(248, 113, 113)' : 'rgba(255, 255, 255, 0.7)',
-                        cursor: hasError ? 'not-allowed' : 'pointer'
-                    }}
-                    disabled={hasError}
-                    title={hasError ? '3D mode unavailable' : `Switch to ${actualMode ? '3D' : 'Basic'} mode`}
-                >
-                    <span className="text-[8px] uppercase tracking-widest">
-                        {actualMode ? (hasError ? '3D N/A' : 'Try 3D') : 'Basic'}
-                    </span>
-                </button>
-            )}
-
-            {/* Low-power mode notice removed for cleaner mobile experience */}
         </main>
     );
 }
