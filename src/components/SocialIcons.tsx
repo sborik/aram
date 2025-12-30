@@ -101,7 +101,7 @@ const BandcampIcon = () => (
 
 // Social links - arranged in a circle (9 icons)
 const LINKS = [
-    { id: "spotify", name: "Spotify", url: "https://spotify.com", Icon: SpotifyIcon },
+    { id: "spotify", name: "Spotify", url: "https://open.spotify.com/album/7jhWVvnM0gnQzKw7EYjBND?si=-OHWMcfFQUibLNt9a0ixUw", Icon: SpotifyIcon },
     { id: "bandcamp", name: "Bandcamp", url: "https://aram-grp.bandcamp.com/album/a-ram", Icon: BandcampIcon },
     { id: "instagram", name: "Instagram", url: "https://instagram.com/aramdaband", Icon: () => <Instagram className="w-4 h-4" /> },
     { id: "x", name: "X", url: "https://x.com/aramdaband", Icon: XIcon },
